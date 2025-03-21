@@ -1,17 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, Alert, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Alert, TextInput, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useRouter } from "expo-router";
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const [email, setEmail] = useState(""); // Email state
-  const [num, setNum] = useState(""); // Number state
-  const [showEmailInput, setShowEmailInput] = useState(false); // Controls email input visibility
-  const [showNumberInput, setShowNumberInput] = useState(false); // Controls number input visibility
+  const [email, setEmail] = useState("");
+  const [num, setNum] = useState("");
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [showNumberInput, setShowNumberInput] = useState(false);
 
-  const handleLogOut = () => {
-    router.replace("/");
-  };
+  const handleLogOut = () => router.replace("/");
 
   const handleChangePassword = () => {
     if (!email) {
@@ -21,8 +19,8 @@ export default function ProfileScreen() {
 
     setTimeout(() => {
       Alert.alert("Success", `A password reset link has been sent to ${email}.`);
-      setShowEmailInput(false); // Hide input after submission
-      setEmail(""); // Clear input
+      setShowEmailInput(false);
+      setEmail("");
     }, 1500);
   };
 
@@ -34,63 +32,47 @@ export default function ProfileScreen() {
 
     setTimeout(() => {
       Alert.alert("Success", `Your phone number has been updated to ${num}.`);
-      setShowNumberInput(false); // Hide input after submission
-      setNum(""); // Clear input
+      setShowNumberInput(false);
+      setNum("");
     }, 1500);
   };
 
   return (
     <View style={styles.container}>
-      {/* Static User Info */}
-      <View style={styles.userInfoContainer}>
-        <Text style={styles.userName}>John Doe</Text>
-        <Text style={styles.userEmail}>johndoe@example.com</Text>
-        <Text style={styles.userPhone}>+91 9876543210</Text>
+      {/* User Info */}
+      <View style={styles.profileCard}>
+        <Image source={{ uri: "https://i.pravatar.cc/100" }} style={styles.avatar} />
+        <View style={styles.userInfo}>
+          <Text style={styles.userName}>Alex Smith</Text>
+          <Text style={styles.userEmail}>alexsmith@example.com</Text>
+          <Text style={styles.userPhone}>+91 9876543210</Text>
+        </View>
       </View>
 
-      {/* Change Password Section */}
-      <TouchableOpacity
-        style={[styles.button, styles.buttonPrimary]}
-        onPress={() => setShowEmailInput(!showEmailInput)}
-      >
+      {/* Change Password */}
+      <TouchableOpacity style={[styles.button, styles.buttonPrimary]} onPress={() => setShowEmailInput(!showEmailInput)}>
         <Text style={styles.buttonText}>Change Password</Text>
       </TouchableOpacity>
 
       {showEmailInput && (
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Enter your email:</Text>
-          <TextInput
-            placeholder="Enter email"
-            value={email}
-            onChangeText={setEmail}
-            style={styles.input}
-            keyboardType="email-address"
-          />
+          <TextInput placeholder="Enter email" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" />
           <TouchableOpacity style={[styles.button, styles.buttonSuccess]} onPress={handleChangePassword}>
             <Text style={styles.buttonText}>Send Reset Email</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {/* Change Number Section */}
-      <TouchableOpacity
-        style={[styles.button, styles.buttonPrimary]}
-        onPress={() => setShowNumberInput(!showNumberInput)}
-      >
+      {/* Change Number */}
+      <TouchableOpacity style={[styles.button, styles.buttonPrimary]} onPress={() => setShowNumberInput(!showNumberInput)}>
         <Text style={styles.buttonText}>Change Number</Text>
       </TouchableOpacity>
 
       {showNumberInput && (
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Enter your new number:</Text>
-          <TextInput
-            placeholder="Enter new number"
-            value={num}
-            onChangeText={setNum}
-            style={styles.input}
-            keyboardType="number-pad"
-            maxLength={10}
-          />
+          <TextInput placeholder="Enter new number" value={num} onChangeText={setNum} style={styles.input} keyboardType="number-pad" maxLength={10} />
           <TouchableOpacity style={[styles.button, styles.buttonWarning]} onPress={handleChangeNumber}>
             <Text style={styles.buttonText}>Update Number</Text>
           </TouchableOpacity>
@@ -111,19 +93,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#f0f2f5",
   },
-  userInfoContainer: {
-    marginBottom: 30,
+  profileCard: {
+    width: "100%",
+    flexDirection: "row",
     alignItems: "center",
-    padding: 15,
-    borderRadius: 10,
     backgroundColor: "#fff",
-    elevation: 3,
+    padding: 15,
+    borderRadius: 15,
+    elevation: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.15,
     shadowRadius: 5,
+    marginBottom: 25,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginRight: 15,
+  },
+  userInfo: {
+    flex: 1,
   },
   userName: {
     fontSize: 22,
@@ -132,64 +125,81 @@ const styles = StyleSheet.create({
   },
   userEmail: {
     fontSize: 16,
-    color: "#777",
+    color: "#555",
     marginTop: 5,
   },
   userPhone: {
     fontSize: 16,
-    color: "#777",
+    color: "#555",
     marginTop: 5,
   },
   inputContainer: {
     width: "100%",
-    marginTop: 15,
     padding: 15,
-    alignItems: "center",
-    borderRadius: 10,
+    borderRadius: 12,
     backgroundColor: "#fff",
-    elevation: 2,
+    elevation: 3,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    alignItems: "center",
+    marginBottom: 10,
   },
   label: {
     fontSize: 16,
-    fontWeight: "500",
-    color: "#444",
-    marginBottom: 5,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 8,
   },
   input: {
     width: "100%",
     height: 45,
     borderWidth: 1,
-    borderColor: "#bbb",
-    borderRadius: 8,
+    borderColor: "#ccc",
+    borderRadius: 10,
     paddingHorizontal: 12,
     marginBottom: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#f9f9f9",
     fontSize: 16,
     color: "#333",
   },
   button: {
     width: "100%",
-    paddingVertical: 12,
-    borderRadius: 8,
+    paddingVertical: 14,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 8,
+    elevation: 3,
   },
   buttonPrimary: {
-    backgroundColor: "#24a0ed", // Blue for primary actions
+    backgroundColor: "#6200ee",
+    shadowColor: "#007bff",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   buttonSuccess: {
-    backgroundColor: "#4CAF50", // Green for success actions
+    backgroundColor: "#28a745",
+    shadowColor: "#28a745",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   buttonWarning: {
-    backgroundColor: "#FF9800", // Orange for warning actions
+    backgroundColor: "#ff9800",
+    shadowColor: "#ff9800",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   buttonDanger: {
-    backgroundColor: "#D32F2F", // Red for log out
+    backgroundColor: "#dc3545",
+    shadowColor: "#dc3545",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   buttonText: {
     fontSize: 16,
